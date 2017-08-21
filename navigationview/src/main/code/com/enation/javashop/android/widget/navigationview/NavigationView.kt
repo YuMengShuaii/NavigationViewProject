@@ -67,9 +67,16 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
      */
     private  var TEXT_VIEW_TAG = "NavigationTextView"
 
+    /**
+     * 只有图标的数据源
+     */
     private  var dataIcon : Array<NavigationIconModel>? = null
 
+    /**
+     * 图标文字的数据源
+     */
     private var  data :ArrayList<NavigationModel>? = null
+
     /**
      * 构造方法
      * @param context 上下文
