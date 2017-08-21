@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="useQQ" format="boolean"/>
+    <attr name="useWechat" format="boolean"/>
+    <attr name="useSina" format="boolean"/>
+    <attr name="debugLogger" format="boolean"/>
+    <attr name="qqSrc" format="reference"/>
+    <attr name="wechatSrc" format="reference"/>
+    <attr name="sinaSrc" format="reference"/>
+    <declare-styleable name="ConnectView">
+        <attr name="useQQ"/>
+        <attr name="useWechat"/>
+        <attr name="useSina"/>
+        <attr name="debugLogger"/>
+        <attr name="qqSrc" />
+        <attr name="wechatSrc" />
+        <attr name="sinaSrc" />
+    </declare-styleable>
+</resources>
