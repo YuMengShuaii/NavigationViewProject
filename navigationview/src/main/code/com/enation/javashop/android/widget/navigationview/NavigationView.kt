@@ -1,6 +1,8 @@
 package com.enation.javashop.android.widget.navigationview
 
 import android.content.Context
+import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.Gravity
@@ -165,10 +167,10 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
                 subViews!!.forEach { linear ->
                     if (subViews!!.indexOf(item)==subViews!!.indexOf(linear)){
                         item.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(datum.selectImage)
-                        item.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(resources.getColor(selectColor))
+                        item.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(selectColor))
                     }else{
                         linear.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(data[subViews!!.indexOf(linear)].nomalImage)
-                        linear.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(resources.getColor(nomalColor))
+                        linear.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(nomalColor))
                     }
                 }
                 event.invoke(subViews!!.indexOf(item))
@@ -177,7 +179,7 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
             subViews!!.add(item)
             if (subViews!!.size-1==selectIndex){
                 item.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(datum.selectImage)
-                item.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(resources.getColor(selectColor))
+                item.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(selectColor))
             }
         }
     }
@@ -259,7 +261,7 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
             textview.height = textheight
             textview.textSize = (px2sp(context,textheight)*0.7).toFloat()
             textview.text = text
-            textview.setTextColor(resources.getColor(nomalColor))
+            textview.setTextColor(getColor(nomalColor))
             item.addView(textview)
         }
         return item
@@ -309,14 +311,16 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(dataIcon!![subViews!!.indexOf(subView)].selectImage)
                         }else{
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(data!![subViews!!.indexOf(subView)].selectImage)
-                            subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(resources.getColor(selectColor))
+                            subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(selectColor))
                         }
                     }else{
                         if (subView.findViewWithTag<TextView>(TEXT_VIEW_TAG)==null){
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(dataIcon!![subViews!!.indexOf(subView)].nomalImage)
                         }else{
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(data!![subViews!!.indexOf(subView)].nomalImage)
-                            subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(resources.getColor(nomalColor))
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(nomalColor))
+                            }
                         }
                     }
                 }
@@ -380,5 +384,18 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
     private fun getScreenHeight(): Int{
         var wm =context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return   wm.defaultDisplay.height
+    }
+
+    private fun getColor(color :Int) :Int{
+        var result:Int = 0
+        try {
+          result =  ContextCompat.getColor(context,color)
+        }catch (e :Exception){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    result = resources.getColor(color,null)
+                }
+            return result
+        }
+        return result
     }
 }
