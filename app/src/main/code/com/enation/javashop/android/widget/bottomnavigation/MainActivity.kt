@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.util.Log
 import com.enation.javashop.android.widget.navigationview.NavigationIconModel
 import com.enation.javashop.android.widget.navigationview.NavigationModel
+import com.enation.javashop.android.widget.navigationview.TabActionInterceptor
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         navigation.setData(data,{
             i ->
             ViewPager(baseContext).setCurrentItem(i,false)
+        })
+        navigation.addInterceptor(object :TabActionInterceptor{
+            override fun interceptor(index: Int): Boolean {
+                return index == 3
+            }
         })
 
     }

@@ -79,6 +79,17 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
      */
     private var  data :ArrayList<NavigationModel>? = null
 
+    private val interceptors = ArrayList<TabActionInterceptor>()
+
+
+    fun addInterceptor(interceptor: TabActionInterceptor){
+        interceptors.add(interceptor)
+    }
+
+    fun interceptorClear(){
+        interceptors.clear()
+    }
+
     /**
      * 构造方法
      * @param context 上下文
@@ -164,6 +175,16 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
         for (datum in data) {
             var item = createItem(false,datum.nomalImage,datum.itemTitle)
             item.setOnClickListener {
+
+                if (interceptors.size > 0){
+                    for (interceptor in interceptors) {
+                      val isInterceptor = interceptor.interceptor(subViews!!.indexOf(item))
+                        if (isInterceptor){
+                            return@setOnClickListener
+                        }
+                    }
+                }
+
                 subViews!!.forEach { linear ->
                     if (subViews!!.indexOf(item)==subViews!!.indexOf(linear)){
                         item.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(datum.selectImage)
@@ -318,9 +339,7 @@ class NavigationView : LinearLayout,NavigationViewAgreement {
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(dataIcon!![subViews!!.indexOf(subView)].nomalImage)
                         }else{
                             subView.findViewWithTag<ImageView>(IAMGE_VIEW_TAG).setImageResource(data!![subViews!!.indexOf(subView)].nomalImage)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(nomalColor))
-                            }
+                            subView.findViewWithTag<TextView>(TEXT_VIEW_TAG).setTextColor(getColor(nomalColor))
                         }
                     }
                 }
